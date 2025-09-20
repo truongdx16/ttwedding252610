@@ -1,0 +1,571 @@
+@font-face {
+  font-family: "Fz Alpha Brights";
+  src: url("fonts/Fz Alpha Brights.otf") format("opentype");
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-family: "Cormorant Garamond", serif;
+  scroll-behavior: smooth;
+}
+
+.wrapper {
+  max-width: 520px;
+  background-color: #fcf4ea;
+  margin: 0 auto;
+}
+
+.section {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.section-content {
+  width: 100%;
+  text-align: center;
+}
+
+/* Giới thiệu */
+.section-intro {
+  padding: 0;
+}
+
+.intro-gif {
+  width: 100%;
+  object-fit: contain;
+}
+
+/* Cô dâu & Chú rể */
+.couple-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+}
+
+.wedding-announcement p {
+  font-size: 40px;
+  font-weight: 700;
+  margin: 4px 0;
+}
+
+.bride-groom {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pulse {
+  animation: pulse 3s ease-in-out infinite;
+  font-family: "Fz Alpha Brights", serif;
+  font-size: 25px;
+}
+
+.pulse-delay-0 {
+  animation-delay: 0s;
+}
+
+.pulse-delay-1 {
+  animation-delay: 1s;
+}
+
+.pulse-delay-2 {
+  font-size: 30px !important;
+  font-weight: 600;
+  animation-delay: 2s;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.08);
+    opacity: 0.95;
+  }
+}
+
+.couple-heart {
+  font-size: 18px;
+  color: #be3455;
+}
+
+.couple-photo img {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.event-address {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.event-address p {
+  font-size: 16px;
+}
+
+/* Thời gian & Địa điểm */
+.wedding-date {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  margin-top: 20px;
+}
+
+.map-container iframe {
+  width: 100%;
+  height: 300px;
+  border: none;
+  border-radius: 12px;
+}
+
+.countdown-container {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.countdown-box {
+  border: 2px solid #ccc;
+  padding: 10px 15px;
+  border-radius: 10px;
+  text-align: center;
+  min-width: 70px;
+  font-family: "Arial", sans-serif;
+  background-color: #fefefe;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.countdown-box span {
+  font-size: 24px;
+  font-weight: bold;
+  display: block;
+  color: #333;
+}
+
+.countdown-box div {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Album ảnh cưới */
+.section-we-tied {
+  display: flex;
+  flex-direction: column;
+}
+
+.tied-title {
+  text-align: left;
+  font-size: 28px;
+  font-weight: 700;
+  padding-bottom: 20px;
+  font-style: italic;
+}
+
+.section-we-tied img {
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+  object-fit: cover;
+}
+
+/* Thông tin phản hồi */
+.section-thank-you {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.section-thank-you .section-content {
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.centered-label {
+  display: block;
+  font-weight: bold;
+  text-align: center;
+}
+
+.select-toggle-group {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.select-toggle {
+  border: 2px solid #ccc;
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 12px;
+  cursor: pointer;
+  text-align: center;
+  width: 120px;
+  transition: all 0.3s ease;
+}
+
+#status-select .select-toggle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 180px;
+}
+
+.select-toggle.active {
+  border-color: #be3455;
+  color: #be3455;
+}
+
+input[type="text"],
+textarea,
+select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+.submit-btn {
+  background-color: #be3455;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Nút bật/tắt nhạc */
+#music-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #be3455;
+  border: none;
+  border-radius: 50%;
+  padding: 12px;
+  cursor: pointer;
+  z-index: 9999;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#music-toggle svg {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+/* Slash dấu gạch chéo */
+#music-toggle .slash {
+  position: absolute;
+  width: 28px;
+  height: 2px;
+  background-color: #fff;
+  transform: rotate(45deg);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+/* Chỉ hiện slash khi có class off */
+#music-toggle.off .slash {
+  opacity: 1;
+}
+
+/* Styles cho phần địa điểm mới */
+.ceremony-section {
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.ceremony-section h3 {
+  font-size: 24px;
+  color: #be3455;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.venue-name {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.ceremony-time {
+  font-size: 18px;
+  color: #be3455;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.reception-section {
+  margin-bottom: 20px;
+}
+
+.reception-section h3 {
+  font-size: 24px;
+  color: #be3455;
+  margin-bottom: 30px;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Reception Info */
+.reception-info {
+  margin-bottom: 25px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.95),
+    rgba(255, 248, 240, 0.95)
+  );
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(190, 52, 85, 0.2);
+}
+
+.reception-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #be3455;
+  text-align: center;
+  margin-bottom: 25px;
+  padding-bottom: 12px;
+  border-bottom: 3px solid rgba(190, 52, 85, 0.4);
+  font-family: "Cormorant Garamond", serif;
+  letter-spacing: 1px;
+}
+
+.reception-schedule {
+  margin-bottom: 20px;
+}
+
+.schedule-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(190, 52, 85, 0.15);
+  transition: background-color 0.2s ease;
+}
+
+.schedule-item:hover {
+  background-color: rgba(190, 52, 85, 0.03);
+  border-radius: 6px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.schedule-item:last-child {
+  border-bottom: none;
+}
+
+.schedule-type {
+  font-size: 18px;
+  font-weight: 600;
+  color: #be3455;
+  font-family: "Cormorant Garamond", serif;
+  letter-spacing: 0.5px;
+}
+
+.schedule-time {
+  font-size: 16px;
+  color: #2c2c2c;
+  font-weight: 500;
+  font-family: "Arial", sans-serif;
+}
+
+.reception-address {
+  font-size: 15px;
+  color: #555;
+  text-align: center;
+  padding: 15px;
+  background-color: rgba(190, 52, 85, 0.08);
+  border-radius: 10px;
+  line-height: 1.5;
+  font-weight: 400;
+  border: 1px solid rgba(190, 52, 85, 0.1);
+}
+
+/* Time Badges */
+.time-badge {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+  min-width: 80px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.time-badge.lunch {
+  background: linear-gradient(135deg, #ff9a56, #ff6b35);
+}
+
+.time-badge.afternoon {
+  background: linear-gradient(135deg, #4ecdc4, #44a08d);
+}
+
+.time-badge.evening {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+/* Venue Info */
+.venue-info {
+  flex: 1;
+}
+
+.venue-info .venue-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.venue-address {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.reception-time {
+  font-size: 16px;
+  color: #be3455;
+  font-weight: bold;
+  margin-top: 8px;
+}
+
+.maps-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.map-section {
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.map-section h3 {
+  font-size: 18px;
+  color: #be3455;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.map-container {
+  width: 100%;
+  height: 200px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.map-container iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Responsive cho mobile */
+@media (max-width: 480px) {
+  .ceremony-section,
+  .reception-info,
+  .map-section {
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+
+  .ceremony-section h3,
+  .reception-section h3 {
+    font-size: 20px;
+  }
+
+  .venue-name {
+    font-size: 18px;
+  }
+
+  .map-container {
+    height: 150px;
+  }
+
+  .reception-info {
+    padding: 15px;
+  }
+
+  .reception-title {
+    font-size: 20px;
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+  }
+
+  .schedule-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 15px 0;
+  }
+
+  .schedule-type {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+
+  .schedule-time {
+    font-size: 15px;
+    font-weight: 600;
+    color: #2c2c2c;
+  }
+
+  .reception-address {
+    font-size: 14px;
+    padding: 12px;
+    line-height: 1.6;
+    font-weight: 500;
+  }
+}

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đám cưới Thành Tuân & Minh Thư</title>
+
+  <!-- Fonts & Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+
+  <!-- Google Sheets Integration -->
+  <!-- 
+    Hướng dẫn setup Google Sheets:
+    1. Tạo Google Sheet mới tại https://sheets.google.com
+    2. Mở Apps Script: Extensions > Apps Script
+    3. Copy code từ file google-apps-script.js vào Apps Script
+    4. Deploy as web app với quyền "Anyone"
+    5. Copy URL và thay thế YOUR_GOOGLE_APPS_SCRIPT_URL trong main.js
+  -->
+</head>
+
+<body>
+
+  <div class="wrapper">
+
+    <!-- Giới thiệu -->
+    <div class="section section-intro">
+      <img src="images/TT_60X120.webp" alt="Giới thiệu đám cưới" class="intro-gif" />
+    </div>
+
+    <!-- Cô dâu & Chú rể -->
+    <div class="section section-couple">
+      <div class="section-content couple-content">
+        <div class="wedding-announcement">
+          <p>The Wedding Of</p>
+        </div>
+
+        <div class="bride-groom">
+          <span class="pulse pulse-delay-0">Thành Tuân</span>
+          <span class="couple-heart">
+            <i class="fa-solid fa-heart heart-icon"></i>
+          </span>
+          <span class="pulse pulse-delay-1">Minh Thư</span>
+        </div>
+
+        <!-- <div class="couple-photo">
+          <img src="images/hinhus.jpg" alt="Ảnh cưới Tuân & Thư" />
+        </div> -->
+
+        <div class="event-address">
+          <div class="ceremony-section">
+            <h3 class="pulse pulse-delay-2">HÔN LỄ</h3>
+            <p class="venue-name">Giáo xứ Bình Châu</p>
+            <p>Ấp Kênh 8A, Xã Thạnh Đông, Tỉnh An Giang</p>
+            <p class="ceremony-time">15:30 - 26/10/2025</p>
+          </div>
+
+          <div class="reception-section">
+            <h3 class="pulse pulse-delay-3">TIỆC RƯỢU</h3>
+
+            <!-- Nhà Gái -->
+            <div class="reception-info">
+              <div class="reception-title">Nhà Gái</div>
+              <div class="reception-schedule">
+                <div class="schedule-item">
+                  <div class="schedule-type">Tiệc chính</div>
+                  <div class="schedule-time">11:00 - 25/10/2025</div>
+                </div>
+                <div class="schedule-item">
+                  <div class="schedule-type">Tiệc chiều</div>
+                  <div class="schedule-time">17:30 - 24/10/2025</div>
+                </div>
+              </div>
+              <div class="reception-address">TƯ GIA - 237/1 Ấp Kênh 8A, Xã Thạnh Đông, Tỉnh An Giang</div>
+            </div>
+
+            <!-- Nhà Trai -->
+            <div class="reception-info">
+              <div class="reception-title">Nhà Trai</div>
+              <div class="reception-schedule">
+                <div class="schedule-item">
+                  <div class="schedule-type">Tiệc chính</div>
+                  <div class="schedule-time">11:00 - 26/10/2025</div>
+                </div>
+                <div class="schedule-item">
+                  <div class="schedule-type">Tiệc chiều</div>
+                  <div class="schedule-time">17:00 - 25/10/2025</div>
+                </div>
+              </div>
+              <div class="reception-address">TƯ GIA - 315 Ấp Kênh 7A, Xã Thạnh Đông, Tỉnh An Giang</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Thời gian & Địa điểm -->
+    <div class="section section-wedding-date">
+      <div class="section-content">
+        <div id="countdown" class="countdown-container">
+          <div class="countdown-box"><span id="days">00</span>
+            <div>Days</div>
+          </div>
+          <div class="countdown-box"><span id="hours">00</span>
+            <div>Hours</div>
+          </div>
+          <div class="countdown-box"><span id="minutes">00</span>
+            <div>Minutes</div>
+          </div>
+          <div class="countdown-box"><span id="seconds">00</span>
+            <div>Seconds</div>
+          </div>
+        </div>
+        <img class="wedding-date" src="images/TT_3629.webp" alt="Giới thiệu đám cưới" />
+        <div class="maps-container">
+          <div class="map-section">
+            <h3>Bản đồ Giáo xứ Bình Châu</h3>
+            <div class="map-container">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3928.510921183001!2d105.24711368552049!3d10.057156364398937!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31a0bae8321a73eb%3A0xd5fc75ba7402fb34!2zTmjDoCB0aOG7nSBCw6xuaCBDaMOidQ!5e0!3m2!1svi!2s!4v1758387409921!5m2!1svi!2s"
+                width="400" height="300" style="border:0;" allowfullscreen="" loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Album ảnh cưới -->
+    <div class="section section-we-tied">
+      <div class="section-content">
+        <h2 class="tied-title">"We tied the knot"</h2>
+      </div>
+      <div class="section-content">
+        <img src="images/TT_70x110.webp" alt="Album ảnh cưới" />
+      </div>
+    </div>
+
+    <!-- Section 5: Lời cảm ơn + Form -->
+    <div class="section section-thank-you">
+      <div class="section-content">
+        <h2 class="thank-title">RSVP</h2>
+        <div>To help us arrange the seat, we would greatly appreciate your RSVP!</div>
+        <div style="margin-bottom: 30px; font-style: italic; font-size: 14px;">(Để thuận tiện cho việc sắp xếp chỗ ngồi,
+          vui lòng phản hồi giúp vợ chồng mình
+          nhé!)</div>
+        <form id="guest-form">
+
+          <!-- Chọn bên tham dự -->
+          <div class="form-group">
+            <div class="select-toggle-group" id="side-select">
+              <div class="select-toggle active" data-value="Nhà trai">
+                <img width="46px" src="images/groom.png" alt="Giới thiệu đám cưới" />
+                <div>Groom</div>
+                <div style="font-style: italic; font-size: 14px;">(Nhà trai)</div>
+              </div>
+              <div class="select-toggle" data-value="Nhà gái">
+                <img width="38" src="images/bride.png" />
+                <div>Bride</div>
+                <div style="font-style: italic; font-size: 14px;">(Nhà gái)</div>
+              </div>
+            </div>
+            <input type="hidden" name="side" id="side-input" value="Nhà trai" />
+          </div>
+
+          <!-- Tên khách mời -->
+          <div class="form-group">
+            <label class="centered-label" for="fullname">Guest name:</label>
+            <div style="font-style: italic; font-size: 14px; margin-bottom: 8px !important;">(Tên khách mời)</div>
+            <input type="text" id="fullname" name="fullname" required />
+          </div>
+
+          <!-- Lời chúc -->
+          <div class="form-group">
+            <label class="centered-label" for="wish">Wishes to the Bride and Groom:</label>
+            <div style="font-style: italic; font-size: 14px; margin-bottom: 8px !important;">(Lời chúc)</div>
+            <textarea rows="5" id="wish" name="wish" style="resize: none;"></textarea>
+          </div>
+
+          <!-- Trạng thái tham dự -->
+          <div class="form-group">
+            <div class="select-toggle-group" id="status-select">
+              <div class="select-toggle active" data-value="Sẵn sàng">
+                <img style="margin-right: 10px;" width="60" src="images/yeah.svg" />
+                <div>
+                  <div>Yeah!</div>
+                  <div>Sẵn sàng</div>
+                </div>
+              </div>
+              <div class="select-toggle" data-value="Rất tiếc">
+                <img style="margin-right: 10px;" width="60" src="images/oh.svg" />
+                <div>
+                  <div>Oh!</div>
+                  <div>Rất tiếc</div>
+                </div>
+              </div>
+            </div>
+            <input type="hidden" name="status" id="status-input" value="Sẵn sàng" />
+          </div>
+
+          <!-- Dropdown số lượng người tham dự -->
+          <div class="form-group" id="people-group" style="display: block;">
+            <label class="centered-label">Number of participants:</label>
+            <div style="font-style: italic; font-size: 14px; margin-bottom: 8px !important;">(Số người tham dự)</div>
+            <select name="people" required
+              style="padding: 10px; font-size: 16px; width: 100%; max-width: 380px; border-radius: 6px; border: 1px solid #ccc;">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+
+          <!-- Nút xác nhận -->
+          <div class="form-group center">
+            <button type="submit" class="submit-btn">Submit <br /> <span
+                style="font-style: italic; font-size: 14px;">(Xác nhận)</span></button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <audio id="bg-music" loop autoplay>
+      <source src="audio/kodidien.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Nút bật/tắt nhạc -->
+    <button id="music-toggle" class="off" aria-label="Toggle music">
+      <!-- Icon nốt nhạc (SVG) -->
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z" />
+      </svg>
+      <span class="slash"></span>
+    </button>
+  </div>
+  <script src="./main.js"></script>
+</body>
+
+</html>
