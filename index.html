@@ -27,12 +27,18 @@
   <div class="wrapper">
 
     <!-- Giới thiệu -->
-    <div class="section section-intro">
+    <section class="section section-intro" id="intro">
       <img src="images/TT_60X120.webp" alt="Giới thiệu đám cưới" class="intro-gif" />
-    </div>
+      <!-- Scroll indicator for mobile -->
+      <div class="scroll-indicator" id="scroll-indicator">
+        <div class="scroll-arrow">
+          <i class="fas fa-arrow-down"></i>
+        </div>
+      </div>
+    </section>
 
     <!-- Cô dâu & Chú rể -->
-    <div class="section section-couple">
+    <section class="section section-couple" id="couple">
       <div class="section-content couple-content">
         <div class="wedding-announcement">
           <p>The Wedding Of</p>
@@ -55,7 +61,7 @@
             <h3 class="pulse pulse-delay-2">HÔN LỄ</h3>
             <p class="venue-name">Giáo xứ Bình Châu</p>
             <p>Ấp Kênh 8A, Xã Thạnh Đông, Tỉnh An Giang</p>
-            <p class="ceremony-time">15:30 - 26/10/2025</p>
+            <p class="ceremony-time">15:30 - 24/10/2025</p>
           </div>
 
           <div class="reception-section">
@@ -95,10 +101,10 @@
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
     <!-- Thời gian & Địa điểm -->
-    <div class="section section-wedding-date">
+    <section class="section section-wedding-date" id="wedding-info">
       <div class="section-content">
         <div id="countdown" class="countdown-container">
           <div class="countdown-box"><span id="days">00</span>
@@ -129,20 +135,20 @@
 
         </div>
       </div>
-    </div>
+    </section>
 
     <!-- Album ảnh cưới -->
-    <div class="section section-we-tied">
+    <section class="section section-we-tied" id="gallery">
       <div class="section-content">
         <h2 class="tied-title">"We tied the knot"</h2>
       </div>
       <div class="section-content">
         <img src="images/TT_70x110.webp" alt="Album ảnh cưới" />
       </div>
-    </div>
+    </section>
 
     <!-- Section 5: Lời cảm ơn + Form -->
-    <div class="section section-thank-you">
+    <section class="section section-thank-you" id="rsvp">
       <div class="section-content">
         <h2 class="thank-title">RSVP</h2>
         <div>To help us arrange the seat, we would greatly appreciate your RSVP!</div>
@@ -224,14 +230,14 @@
           </div>
         </form>
       </div>
-    </div>
+    </section>
 
-    <audio id="bg-music" loop autoplay>
+    <audio id="bg-music" loop>
       <source src="audio/kodidien.mp3" type="audio/mpeg">
     </audio>
 
     <!-- Nút bật/tắt nhạc -->
-    <button id="music-toggle" class="off" aria-label="Toggle music">
+    <button id="music-toggle" aria-label="Toggle music">
       <!-- Icon nốt nhạc (SVG) -->
       <svg width="24" height="24" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
         <path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z" />

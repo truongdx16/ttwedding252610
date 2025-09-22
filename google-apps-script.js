@@ -49,8 +49,62 @@ function doPost(e) {
 }
 
 function doGet(e) {
-  // Test function để kiểm tra script hoạt động
-  return ContentService.createTextOutput(
-    JSON.stringify({ message: "Google Apps Script is working!" })
-  ).setMimeType(ContentService.MimeType.JSON);
+  try {
+    // Kiểm tra nếu có callback parameter (JSONP)
+    const callback = e.parameter.callback;
+    const data = e.parameter.data;
+
+    if (callback && data) {
+      // Xử lý JSONP request
+      const jsonData = JSON.parse(data);
+
+      // Lấy Google Sheet
+      const sheet = SpreadsheetApp.getActiveSheet();
+
+      // Thêm header nếu sheet trống
+      if (sheet.getLastRow() === 0) {
+        sheet
+          .getRange(1, 1, 1, 6)
+          .setValues([
+            ["Timestamp", "Side", "Full Name", "Wish", "Status", "People"],
+          ]);
+      }
+
+      // Thêm dữ liệu mới
+      const timestamp = new Date(jsonData.timestamp);
+      const rowData = [
+        timestamp,
+        jsonData.side,
+        jsonData.fullname,
+        jsonData.wish,
+        jsonData.status,
+        jsonData.people,
+      ];
+
+      sheet.appendRow(rowData);
+
+      // Trả về JSONP response
+      const result = { success: true, message: "Data saved successfully" };
+      return ContentService.createTextOutput(
+        callback + "(" + JSON.stringify(result) + ")"
+      ).setMimeType(ContentService.MimeType.JAVASCRIPT);
+    }
+
+    // Test function để kiểm tra script hoạt động
+    return ContentService.createTextOutput(
+      JSON.stringify({ message: "Google Apps Script is working!" })
+    ).setMimeType(ContentService.MimeType.JSON);
+  } catch (error) {
+    const callback = e.parameter.callback;
+    if (callback) {
+      const result = { success: false, error: error.toString() };
+      return ContentService.createTextOutput(
+        callback + "(" + JSON.stringify(result) + ")"
+      ).setMimeType(ContentService.MimeType.JAVASCRIPT);
+    }
+
+    return ContentService.createTextOutput(
+      JSON.stringify({ success: false, error: error.toString() })
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
 }

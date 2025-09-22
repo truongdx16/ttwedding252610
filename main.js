@@ -1,3 +1,39 @@
+// Scroll indicator functionality
+document.addEventListener("DOMContentLoaded", () => {
+  const scrollIndicator = document.getElementById("scroll-indicator");
+
+  // Debug: Check if element exists
+  console.log("Scroll indicator element:", scrollIndicator);
+
+  if (!scrollIndicator) {
+    console.error("Scroll indicator element not found!");
+    return;
+  }
+
+  // Show/hide scroll indicator based on scroll position
+  function updateScrollIndicator() {
+    const scrollY = window.scrollY;
+    console.log("Scroll Y:", scrollY); // Debug log
+
+    // Show indicator only when at the very top of the page
+    if (scrollY < 50) {
+      scrollIndicator.style.opacity = "1";
+      scrollIndicator.style.display = "flex";
+      console.log("Showing indicator"); // Debug log
+    } else {
+      scrollIndicator.style.opacity = "0";
+      scrollIndicator.style.display = "none";
+      console.log("Hiding indicator"); // Debug log
+    }
+  }
+
+  // Update on scroll
+  window.addEventListener("scroll", updateScrollIndicator);
+
+  // Initial check
+  updateScrollIndicator();
+});
+
 // Ngày cưới (26/07/2025 lúc 08:00)
 const weddingDate = new Date("2025-10-26T00:00:00");
 
@@ -62,6 +98,47 @@ document.querySelectorAll("#status-select .select-toggle").forEach((toggle) => {
   });
 });
 
+// Function để gửi dữ liệu sử dụng JSONP
+function submitDataWithJSONP(data, formElement) {
+  const GOOGLE_SCRIPT_URL =
+    "https://script.google.com/macros/s/AKfycbzq2ZmzRl47tvAvFo6iXwO3mKX7QOtSWni5HbdGITndmpM0nykYSsuyOwdQq7AhQ7aB/exec";
+
+  const script = document.createElement("script");
+  const callbackName = "jsonp_callback_" + Math.round(100000 * Math.random());
+
+  window[callbackName] = function (result) {
+    delete window[callbackName];
+    document.body.removeChild(script);
+
+    if (result.success) {
+      alert("Cảm ơn bạn đã xác nhận! ❤️");
+      formElement.reset();
+      document.getElementById("side-input").value = "Nhà trai";
+      document.getElementById("status-input").value = "Sẵn sàng";
+      document
+        .querySelectorAll(".select-toggle")
+        .forEach((el) => el.classList.remove("active"));
+      document
+        .querySelector('#side-select .select-toggle[data-value="Nhà trai"]')
+        .classList.add("active");
+      document
+        .querySelector('#status-select .select-toggle[data-value="Sẵn sàng"]')
+        .classList.add("active");
+    } else {
+      alert("Có lỗi xảy ra, vui lòng thử lại sau.");
+    }
+  };
+
+  const url =
+    GOOGLE_SCRIPT_URL +
+    "?callback=" +
+    callbackName +
+    "&data=" +
+    encodeURIComponent(JSON.stringify(data));
+  script.src = url;
+  document.body.appendChild(script);
+}
+
 // Bắt sự kiện submit form
 document.getElementById("guest-form").addEventListener("submit", function (e) {
   e.preventDefault(); // Ngăn reload
@@ -89,43 +166,12 @@ document.getElementById("guest-form").addEventListener("submit", function (e) {
     timestamp: Date.now(),
   };
 
-  // Gửi lên Google Sheets
-  // Thay YOUR_GOOGLE_APPS_SCRIPT_URL bằng URL của Google Apps Script đã deploy
-  // AKfycbzwOX2XQbgiES8JLfY0qSogX8oVNpVgynrFcK-S_oVLyBU9_2FkFBzUNrp2LU8z9bT0
+  // Gửi lên Google Sheets sử dụng JSONP để tránh CORS
   const GOOGLE_SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbzwOX2XQbgiES8JLfY0qSogX8oVNpVgynrFcK-S_oVLyBU9_2FkFBzUNrp2LU8z9bT0/exec";
+    "https://script.google.com/macros/s/AKfycbwN0Fm7Db9E2U4JTtyBW-obFCuDv7DLwxsX-TDHEVW5Nybg7EbQsQryPxfgFaXU9ofM/exec";
 
-  fetch(GOOGLE_SCRIPT_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  })
-    .then((response) => response.json())
-    .then((result) => {
-      if (result.success) {
-        alert("Cảm ơn bạn đã xác nhận! ❤️");
-        this.reset();
-        document.getElementById("side-input").value = "Nhà trai";
-        document.getElementById("status-input").value = "Sẵn sàng";
-        document
-          .querySelectorAll(".select-toggle")
-          .forEach((el) => el.classList.remove("active"));
-        document
-          .querySelector('#side-select .select-toggle[data-value="Nhà trai"]')
-          .classList.add("active");
-        document
-          .querySelector('#status-select .select-toggle[data-value="Sẵn sàng"]')
-          .classList.add("active");
-      } else {
-        throw new Error(result.error || "Unknown error");
-      }
-    })
-    .catch((error) => {
-      console.error("Lỗi khi lưu dữ liệu: ", error);
-      alert("Có lỗi xảy ra, vui lòng thử lại sau.");
-    });
+  // Sử dụng JSONP để tránh CORS
+  submitDataWithJSONP(data, this);
 });
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -141,15 +187,44 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let isLooping = false;
 
+  // Phát nhạc tự động khi trang load
+  const startMusic = async () => {
+    try {
+      music.currentTime = startTime;
+      await music.play();
+      isLooping = true;
+      toggleBtn.classList.add("off"); // Nhạc đang phát -> hiển thị nút "tắt"
+      console.log("Music started successfully");
+    } catch (error) {
+      console.log("Autoplay blocked:", error);
+      toggleBtn.classList.remove("off"); // Nhạc bị chặn -> hiển thị nút "bật"
+    }
+  };
+
+  // Bắt đầu phát nhạc ngay khi trang load
+  startMusic();
+
+  // Xử lý nút toggle
   toggleBtn.addEventListener("click", () => {
-    const isOff = toggleBtn.classList.toggle("off");
-    if (isOff) {
+    if (toggleBtn.classList.contains("off")) {
+      // Đang phát -> Tắt nhạc
       music.pause();
       isLooping = false;
+      toggleBtn.classList.remove("off");
+      console.log("Music turned OFF");
     } else {
-      music.currentTime = startTime; // Phát từ giây thứ 39
-      music.play();
-      isLooping = true;
+      // Đang tắt -> Bật nhạc
+      music.currentTime = startTime;
+      music
+        .play()
+        .then(() => {
+          isLooping = true;
+          toggleBtn.classList.add("off");
+          console.log("Music turned ON");
+        })
+        .catch((error) => {
+          console.log("Failed to start music:", error);
+        });
     }
   });
 
@@ -157,7 +232,9 @@ document.addEventListener("DOMContentLoaded", () => {
   music.addEventListener("timeupdate", () => {
     if (isLooping && music.currentTime >= endTime) {
       music.currentTime = startTime;
-      music.play(); // Đảm bảo phát lại
+      music.play().catch((error) => {
+        console.log("Loop play failed:", error);
+      });
     }
   });
 });

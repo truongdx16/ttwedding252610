@@ -13,6 +13,8 @@ html,
 body {
   font-family: "Cormorant Garamond", serif;
   scroll-behavior: smooth;
+  height: 100%;
+  overflow-x: hidden;
 }
 
 .wrapper {
@@ -22,10 +24,12 @@ body {
 }
 
 .section {
+  min-height: 100vh;
   padding: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .section-content {
@@ -36,6 +40,66 @@ body {
 /* Giới thiệu */
 .section-intro {
   padding: 0;
+  position: relative;
+}
+
+/* Scroll Indicator */
+.scroll-indicator {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.scroll-arrow {
+  width: 60px;
+  height: 60px;
+  border: 3px solid white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: bounce 2s infinite;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.scroll-arrow i {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
 }
 
 .intro-gif {
@@ -307,6 +371,15 @@ select:focus {
   opacity: 1;
 }
 
+/* Trạng thái ban đầu - nhạc đang phát */
+#music-toggle:not(.off) {
+  background-color: #be3455;
+}
+
+#music-toggle:not(.off) .slash {
+  opacity: 0;
+}
+
 /* Styles cho phần địa điểm mới */
 .ceremony-section {
   margin-bottom: 30px;
@@ -512,6 +585,18 @@ select:focus {
 }
 
 /* Responsive cho mobile */
+@media (max-width: 768px) {
+  .scroll-indicator {
+    display: flex;
+  }
+}
+
+@media (min-width: 769px) {
+  .scroll-indicator {
+    display: none;
+  }
+}
+
 @media (max-width: 480px) {
   .ceremony-section,
   .reception-info,
