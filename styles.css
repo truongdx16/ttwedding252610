@@ -584,10 +584,90 @@ select:focus {
   border: none;
 }
 
+/* Personalized Greeting Styles */
+.personalized-greeting {
+  animation: fadeInUp 1s ease-out;
+  margin: 30px 0;
+}
+
+.personalized-greeting h2 {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.personalized-greeting h3 {
+  background: linear-gradient(135deg, #be3455, #d63384);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Event Details Styles */
+.personalized-greeting .event-details {
+  text-align: left;
+  margin-top: 15px;
+}
+
+.personalized-greeting .event-item {
+  margin-bottom: 15px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 8px;
+  border-left: 4px solid #be3455;
+}
+
+.personalized-greeting .event-item:last-child {
+  margin-bottom: 0;
+}
+
+.personalized-greeting .event-title {
+  color: #be3455;
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.personalized-greeting .event-location {
+  color: #333;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.personalized-greeting .event-time {
+  color: #be3455;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Responsive cho mobile */
 @media (max-width: 768px) {
   .scroll-indicator {
     display: flex;
+  }
+
+  .personalized-greeting h2 {
+    font-size: 24px !important;
+  }
+
+  .personalized-greeting h3 {
+    font-size: 28px !important;
+  }
+
+  .personalized-greeting div {
+    padding: 20px !important;
   }
 }
 

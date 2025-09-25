@@ -1,5 +1,111 @@
+// URL Parameters handling for guest personalization
+function getUrlParameters() {
+  const urlParams = new URLSearchParams(window.location.search);
+  return {
+    guest: urlParams.get("guest") || "",
+    side: urlParams.get("side") || "", // 'groom' or 'bride'
+    autoPlay: urlParams.get("music") !== "false", // Default to true unless explicitly set to false
+  };
+}
+
+// Get greeting text (neutral)
+function getGreetingText() {
+  return "Trân trọng kính mời"; // Always neutral greeting
+}
+
+// Personalize content based on guest name and side
+function personalizeInvitation(params) {
+  // Update page title if guest name is provided
+  if (params.guest) {
+    document.title = `Thiệp mời đám cưới Thành Tuân & Minh Thư - ${params.guest}`;
+
+    // Determine side-specific information
+    const sideInfo = getSideSpecificInfo(params.side);
+    const greetingText = getGreetingText();
+
+    // Add personalized greeting
+    const personalizedGreeting = document.createElement("div");
+    personalizedGreeting.className = "personalized-greeting";
+    personalizedGreeting.innerHTML = `
+      <div style="text-align: center; margin: 20px 0; padding: 25px; background: linear-gradient(135deg, rgba(190, 52, 85, 0.08), rgba(255, 248, 240, 0.9)); border-radius: 15px; border: 2px solid rgba(190, 52, 85, 0.2); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
+        <div style="margin-bottom: 15px;">
+          <i class="fa-solid fa-heart" style="color: #be3455; font-size: 20px; margin-right: 8px;"></i>
+          <span style="color: #be3455; font-size: 18px; font-weight: 600; letter-spacing: 1px;">THIỆP MỜI</span>
+          <i class="fa-solid fa-heart" style="color: #be3455; font-size: 20px; margin-left: 8px;"></i>
+        </div>
+        <h2 style="color: #be3455; font-size: 28px; margin-bottom: 15px; font-family: 'Cormorant Garamond', serif; font-weight: 700; letter-spacing: 0.5px;">${greetingText}</h2>
+        <h3 style="color: #2c2c2c; font-size: 32px; margin-bottom: 20px; font-family: 'Fz Alpha Brights', serif; font-weight: 600; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">${params.guest}</h3>
+        <div style="border-top: 2px solid rgba(190, 52, 85, 0.3); padding-top: 15px; margin-top: 15px;">
+           <p style="color: #555; font-size: 16px; font-style: italic; line-height: 1.6; margin-bottom: 8px;">đến tham dự</p>
+          <p style="color: #be3455; font-size: 18px; font-weight: 600; letter-spacing: 0.5px;">${sideInfo.eventTitle}</p>
+          ${sideInfo.eventDetails}
+        </div>
+      </div>
+    `;
+
+    // Insert after the intro section
+    const coupleSection = document.getElementById("couple");
+    coupleSection.parentNode.insertBefore(personalizedGreeting, coupleSection);
+  }
+}
+
+// Get side-specific information for invitation
+function getSideSpecificInfo(side) {
+  if (side === "bride") {
+    return {
+      eventTitle: "Lễ cưới và Tiệc rượu nhà gái",
+      eventDetails: `
+        <div style="margin-top: 15px; padding: 15px; background: rgba(190, 52, 85, 0.05); border-radius: 10px; border: 1px solid rgba(190, 52, 85, 0.2);">
+          <div style="margin-bottom: 10px;">
+            <strong style="color: #be3455; font-size: 16px;">🏛️ HÔN LỄ</strong>
+            <p style="color: #333; font-size: 14px; margin: 5px 0;">Giáo xứ Bình Châu</p>
+            <p style="color: #be3455; font-weight: 600; font-size: 14px;">16:00 - Thứ Sáu, 24/10/2025</p>
+          </div>
+          <div style="margin-bottom: 10px;">
+            <strong style="color: #be3455; font-size: 16px;">🍽️ TIỆC CHIỀU NHÀ GÁI</strong>
+            <p style="color: #333; font-size: 14px; margin: 5px 0;">Tư gia - 237/1 Ấp Kênh 8A, Xã Thạnh Đông</p>
+            <p style="color: #be3455; font-weight: 600; font-size: 14px;">17:30 - Thứ Sáu, 24/10/2025</p>
+          </div>
+          <div>
+            <strong style="color: #be3455; font-size: 16px;">🎉 TIỆC CHÍNH NHÀ GÁI</strong>
+            <p style="color: #333; font-size: 14px; margin: 5px 0;">Tư gia - 237/1 Ấp Kênh 8A, Xã Thạnh Đông</p>
+            <p style="color: #be3455; font-weight: 600; font-size: 14px;">11:00 - Thứ Bảy, 25/10/2025</p>
+          </div>
+        </div>
+      `,
+    };
+  } else {
+    return {
+      eventTitle: "Lễ cưới và Tiệc rượu nhà trai",
+      eventDetails: `
+        <div style="margin-top: 15px; padding: 15px; background: rgba(190, 52, 85, 0.05); border-radius: 10px; border: 1px solid rgba(190, 52, 85, 0.2);">
+          <div style="margin-bottom: 10px;">
+            <strong style="color: #be3455; font-size: 16px;">🏛️ HÔN LỄ</strong>
+            <p style="color: #333; font-size: 14px; margin: 5px 0;">Giáo xứ Bình Châu</p>
+            <p style="color: #be3455; font-weight: 600; font-size: 14px;">16:00 - Thứ Sáu, 24/10/2025</p>
+          </div>
+          <div style="margin-bottom: 10px;">
+            <strong style="color: #be3455; font-size: 16px;">🍽️ TIỆC CHIỀU NHÀ TRAI</strong>
+            <p style="color: #333; font-size: 14px; margin: 5px 0;">Tư gia - 315 Ấp Kênh 7A, Xã Thạnh Đông</p>
+            <p style="color: #be3455; font-weight: 600; font-size: 14px;">17:00 - Thứ Bảy, 25/10/2025</p>
+          </div>
+          <div>
+            <strong style="color: #be3455; font-size: 16px;">🎉 TIỆC CHÍNH NHÀ TRAI</strong>
+            <p style="color: #333; font-size: 14px; margin: 5px 0;">Tư gia - 315 Ấp Kênh 7A, Xã Thạnh Đông</p>
+            <p style="color: #be3455; font-weight: 600; font-size: 14px;">11:00 - Chủ Nhật, 26/10/2025</p>
+          </div>
+        </div>
+      `,
+    };
+  }
+}
+
 // Scroll indicator functionality
 document.addEventListener("DOMContentLoaded", () => {
+  // Handle URL parameters first
+  const urlParams = getUrlParameters();
+  personalizeInvitation(urlParams);
+
   const scrollIndicator = document.getElementById("scroll-indicator");
 
   // Debug: Check if element exists
@@ -178,6 +284,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const music = document.getElementById("bg-music");
   const toggleBtn = document.getElementById("music-toggle");
 
+  // Get URL parameters to check if music should auto-play
+  const urlParams = getUrlParameters();
+
   // Cấu hình
   const startTime = 39;
   const endTime = 74;
@@ -187,8 +296,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let isLooping = false;
 
-  // Phát nhạc tự động khi trang load
+  // Phát nhạc tự động khi trang load (only if autoPlay is true)
   const startMusic = async () => {
+    if (!urlParams.autoPlay) {
+      console.log("Music autoplay disabled via URL parameter");
+      toggleBtn.classList.remove("off");
+      return;
+    }
+
     try {
       music.currentTime = startTime;
       await music.play();
