@@ -304,20 +304,121 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    // Chiến lược 1: Thử phát nhạc với muted trước
     try {
       music.currentTime = startTime;
+      music.muted = true; // Bắt đầu với muted để bypass autoplay policy
+      await music.play();
+
+      // Sau khi phát thành công, tăng volume dần dần
+      music.muted = false;
+      music.volume = 0.7;
+      isLooping = true;
+      toggleBtn.classList.add("off");
+      console.log("Music started successfully with muted strategy");
+      return;
+    } catch (error) {
+      console.log("Muted autoplay failed:", error);
+    }
+
+    // Chiến lược 2: Thử phát nhạc bình thường
+    try {
+      music.currentTime = startTime;
+      music.muted = false;
       await music.play();
       isLooping = true;
-      toggleBtn.classList.add("off"); // Nhạc đang phát -> hiển thị nút "tắt"
+      toggleBtn.classList.add("off");
       console.log("Music started successfully");
+      return;
     } catch (error) {
-      console.log("Autoplay blocked:", error);
-      toggleBtn.classList.remove("off"); // Nhạc bị chặn -> hiển thị nút "bật"
+      console.log("Normal autoplay blocked:", error);
     }
+
+    // Chiến lược 3: Chờ user interaction
+    toggleBtn.classList.remove("off");
+
+    const tryPlayOnInteraction = () => {
+      music.currentTime = startTime;
+      music.muted = false;
+      music
+        .play()
+        .then(() => {
+          isLooping = true;
+          toggleBtn.classList.add("off");
+          console.log("Music started after user interaction");
+          // Loại bỏ event listeners sau khi thành công
+          document.removeEventListener("click", tryPlayOnInteraction);
+          document.removeEventListener("touchstart", tryPlayOnInteraction);
+          document.removeEventListener("keydown", tryPlayOnInteraction);
+        })
+        .catch((err) => console.log("Still blocked:", err));
+    };
+
+    // Thêm event listeners để thử phát nhạc khi user tương tác
+    document.addEventListener("click", tryPlayOnInteraction, { once: true });
+    document.addEventListener("touchstart", tryPlayOnInteraction, {
+      once: true,
+    });
+    document.addEventListener("keydown", tryPlayOnInteraction, {
+      once: true,
+    });
+
+    // Hiển thị thông báo nhỏ để người dùng biết cần tương tác
+    const showInteractionHint = () => {
+      const hint = document.createElement("div");
+      hint.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(190, 52, 85, 0.9);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 25px;
+        font-size: 14px;
+        z-index: 10000;
+        animation: fadeInOut 3s ease-in-out;
+        pointer-events: none;
+      `;
+      hint.textContent = "🎵 Nhấn vào trang để phát nhạc";
+      document.body.appendChild(hint);
+
+      // Thêm CSS animation
+      const style = document.createElement("style");
+      style.textContent = `
+        @keyframes fadeInOut {
+          0% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+          20% { opacity: 1; transform: translateX(-50%) translateY(0); }
+          80% { opacity: 1; transform: translateX(-50%) translateY(0); }
+          100% { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+        }
+      `;
+      document.head.appendChild(style);
+
+      setTimeout(() => {
+        if (hint.parentNode) {
+          hint.parentNode.removeChild(hint);
+        }
+        if (style.parentNode) {
+          style.parentNode.removeChild(style);
+        }
+      }, 3000);
+    };
+
+    // Hiển thị thông báo sau 1 giây
+    setTimeout(showInteractionHint, 1000);
   };
 
   // Bắt đầu phát nhạc ngay khi trang load
   startMusic();
+
+  // Thử phát nhạc lại khi window load hoàn tất
+  window.addEventListener("load", () => {
+    if (!isLooping && urlParams.autoPlay) {
+      console.log("Trying to start music on window load");
+      startMusic();
+    }
+  });
 
   // Xử lý nút toggle
   toggleBtn.addEventListener("click", () => {
