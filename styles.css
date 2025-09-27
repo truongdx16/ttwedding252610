@@ -30,6 +30,22 @@ body {
   align-items: center;
   justify-content: center;
   position: relative;
+  margin: 0; /* Loại bỏ margin giữa các section */
+}
+
+/* Điều chỉnh section-couple để giảm khoảng cách */
+.section-couple {
+  min-height: auto !important; /* Bỏ min-height: 100vh */
+  padding: 0 20px 10px 20px; /* Loại bỏ padding top */
+  align-items: flex-start; /* Căn lề trên thay vì center */
+}
+
+/* Điều chỉnh section-wedding-date để giảm khoảng cách */
+.section-wedding-date {
+  min-height: auto !important; /* Bỏ min-height: 100vh */
+  padding: 10px 20px; /* Giảm padding vertical */
+  align-items: flex-start; /* Căn lề trên thay vì center */
+  padding-top: 20px; /* Padding top nhỏ hơn */
 }
 
 .section-content {
@@ -40,13 +56,17 @@ body {
 /* Giới thiệu */
 .section-intro {
   padding: 0;
+  margin: 0; /* Loại bỏ margin */
   position: relative;
+  height: auto; /* Chiều cao tự động theo ảnh */
+  display: block; /* Loại bỏ flex để không có khoảng trống */
+  overflow: hidden; /* Ẩn scroll bar */
 }
 
 /* Scroll Indicator */
 .scroll-indicator {
   position: absolute;
-  bottom: 80px;
+  bottom: 80px; /* Vị trí bottom 80px như yêu cầu */
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -54,6 +74,10 @@ body {
   justify-content: center;
   opacity: 1;
   transition: opacity 0.3s ease;
+  z-index: 10; /* Đảm bảo nút ở trên cùng */
+  cursor: pointer; /* Thêm cursor pointer */
+  pointer-events: auto; /* Đảm bảo có thể click */
+  user-select: none; /* Tránh select text khi click */
 }
 
 .scroll-arrow {
@@ -67,6 +91,15 @@ body {
   animation: bounce 2s infinite;
   background-color: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  pointer-events: auto; /* Đảm bảo có thể click */
+  user-select: none; /* Tránh select text khi click */
+}
+
+.scroll-arrow:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
 }
 
 .scroll-arrow i {
@@ -104,21 +137,47 @@ body {
 
 .intro-gif {
   width: 100%;
+  height: auto; /* Chiều cao tự động theo tỷ lệ ảnh */
+  object-fit: contain; /* Hiển thị toàn bộ ảnh không cắt xén */
+  object-position: center; /* Căn giữa ảnh */
+  display: block; /* Loại bỏ khoảng trống inline */
+}
+
+/* Tùy chọn: Hiển thị đầy đủ với chiều cao cố định */
+.intro-gif.full-height {
+  height: 100vh;
   object-fit: contain;
+  object-position: center;
+}
+
+/* Tùy chọn: Scale để fit width hoàn toàn */
+.intro-gif.fit-width {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  object-position: center;
+}
+
+/* Tùy chọn: Scale để fit height hoàn toàn */
+.intro-gif.fit-height {
+  width: 100%;
+  height: auto; /* Chiều cao tự động theo tỷ lệ ảnh */
+  object-fit: contain;
+  object-position: center;
 }
 
 /* Cô dâu & Chú rể */
 .couple-content {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 8px; /* Giảm từ 16px xuống 8px */
   align-items: center;
 }
 
 .wedding-announcement p {
   font-size: 40px;
   font-weight: 700;
-  margin: 4px 0;
+  margin: 2px 0; /* Giảm từ 4px xuống 2px */
 }
 
 .bride-groom {
@@ -174,7 +233,7 @@ body {
 .event-address {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 2px; /* Giảm từ 4px xuống 2px */
 }
 
 .event-address p {
@@ -382,8 +441,8 @@ select:focus {
 
 /* Styles cho phần địa điểm mới */
 .ceremony-section {
-  margin-bottom: 30px;
-  padding: 20px;
+  margin-bottom: 10px; /* Giảm từ 20px xuống 10px */
+  padding: 10px; /* Giảm từ 15px xuống 10px */
   background-color: rgba(255, 255, 255, 0.8);
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -392,7 +451,7 @@ select:focus {
 .ceremony-section h3 {
   font-size: 24px;
   color: #be3455;
-  margin-bottom: 15px;
+  margin-bottom: 5px; /* Giảm từ 10px xuống 5px */
   font-weight: bold;
 }
 
@@ -411,13 +470,33 @@ select:focus {
 }
 
 .reception-section {
-  margin-bottom: 20px;
+  margin-bottom: 15px; /* Giảm từ 20px xuống 15px */
+}
+
+/* Điều chỉnh khoảng cách khi reception section bị ẩn */
+.reception-section.hidden {
+  margin-bottom: 0;
+}
+
+/* Điều chỉnh margin-bottom của ceremony-section khi reception bị ẩn */
+.ceremony-section:has(+ .reception-section.hidden) {
+  margin-bottom: 10px;
+}
+
+/* Fallback cho browsers không hỗ trợ :has() - sử dụng class */
+.event-address .ceremony-section {
+  margin-bottom: 10px; /* Cập nhật theo giá trị mới */
+}
+
+.event-address .reception-section.hidden ~ * .ceremony-section,
+.event-address:has(.reception-section.hidden) .ceremony-section {
+  margin-bottom: 2px; /* Giảm từ 5px xuống 2px */
 }
 
 .reception-section h3 {
   font-size: 24px;
   color: #be3455;
-  margin-bottom: 30px;
+  margin-bottom: 20px; /* Giảm từ 30px xuống 20px */
   font-weight: bold;
   text-align: center;
 }

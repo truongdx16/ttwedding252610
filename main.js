@@ -15,37 +15,71 @@ function getGreetingText() {
 
 // Personalize content based on guest name and side
 function personalizeInvitation(params) {
+  // Kiểm tra điều kiện bắt buộc: phải có cả guest và side
+  if (!params.guest || !params.side) {
+    console.log("Missing required parameters: guest or side");
+
+    // Hiển thị phần tiệc rượu bình thường
+    const receptionSection = document.getElementById("reception-section");
+    const ceremonySection = document.querySelector(".ceremony-section");
+    if (receptionSection) {
+      receptionSection.style.display = "block";
+      receptionSection.classList.remove("hidden");
+
+      // Khôi phục margin-bottom mặc định của ceremony section
+      if (ceremonySection) {
+        ceremonySection.style.marginBottom = "10px";
+      }
+
+      console.log("Reception section shown - parameters missing");
+    }
+    return;
+  }
+
   // Update page title if guest name is provided
-  if (params.guest) {
-    document.title = `Thiệp mời đám cưới Thành Tuân & Minh Thư - ${params.guest}`;
+  document.title = `Thiệp mời đám cưới Thành Tuân & Minh Thư - ${params.guest}`;
 
-    // Determine side-specific information
-    const sideInfo = getSideSpecificInfo(params.side);
-    const greetingText = getGreetingText();
+  // Determine side-specific information
+  const sideInfo = getSideSpecificInfo(params.side);
+  const greetingText = getGreetingText();
 
-    // Add personalized greeting
-    const personalizedGreeting = document.createElement("div");
-    personalizedGreeting.className = "personalized-greeting";
-    personalizedGreeting.innerHTML = `
-      <div style="text-align: center; margin: 20px 0; padding: 25px; background: linear-gradient(135deg, rgba(190, 52, 85, 0.08), rgba(255, 248, 240, 0.9)); border-radius: 15px; border: 2px solid rgba(190, 52, 85, 0.2); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
-        <div style="margin-bottom: 15px;">
-          <i class="fa-solid fa-heart" style="color: #be3455; font-size: 20px; margin-right: 8px;"></i>
-          <span style="color: #be3455; font-size: 18px; font-weight: 600; letter-spacing: 1px;">THIỆP MỜI</span>
-          <i class="fa-solid fa-heart" style="color: #be3455; font-size: 20px; margin-left: 8px;"></i>
-        </div>
-        <h2 style="color: #be3455; font-size: 28px; margin-bottom: 15px; font-family: 'Cormorant Garamond', serif; font-weight: 700; letter-spacing: 0.5px;">${greetingText}</h2>
-        <h3 style="color: #2c2c2c; font-size: 32px; margin-bottom: 20px; font-family: 'Fz Alpha Brights', serif; font-weight: 600; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">${params.guest}</h3>
-        <div style="border-top: 2px solid rgba(190, 52, 85, 0.3); padding-top: 15px; margin-top: 15px;">
-           <p style="color: #555; font-size: 16px; font-style: italic; line-height: 1.6; margin-bottom: 8px;">đến tham dự</p>
-          <p style="color: #be3455; font-size: 18px; font-weight: 600; letter-spacing: 0.5px;">${sideInfo.eventTitle}</p>
-          ${sideInfo.eventDetails}
-        </div>
+  // Add personalized greeting
+  const personalizedGreeting = document.createElement("div");
+  personalizedGreeting.className = "personalized-greeting";
+  personalizedGreeting.innerHTML = `
+    <div style="text-align: center; margin: 20px 0; padding: 25px; background: linear-gradient(135deg, rgba(190, 52, 85, 0.08), rgba(255, 248, 240, 0.9)); border-radius: 15px; border: 2px solid rgba(190, 52, 85, 0.2); box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);">
+      <div style="margin-bottom: 15px;">
+        <i class="fa-solid fa-heart" style="color: #be3455; font-size: 20px; margin-right: 8px;"></i>
+        <span style="color: #be3455; font-size: 18px; font-weight: 600; letter-spacing: 1px;">THIỆP MỜI</span>
+        <i class="fa-solid fa-heart" style="color: #be3455; font-size: 20px; margin-left: 8px;"></i>
       </div>
-    `;
+      <h2 style="color: #be3455; font-size: 28px; margin-bottom: 15px; font-family: 'Cormorant Garamond', serif; font-weight: 700; letter-spacing: 0.5px;">${greetingText}</h2>
+      <h3 style="color: #2c2c2c; font-size: 32px; margin-bottom: 20px; font-family: 'Fz Alpha Brights', serif; font-weight: 600; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">${params.guest}</h3>
+      <div style="border-top: 2px solid rgba(190, 52, 85, 0.3); padding-top: 15px; margin-top: 15px;">
+         <p style="color: #555; font-size: 16px; font-style: italic; line-height: 1.6; margin-bottom: 8px;">đến tham dự</p>
+        <p style="color: #be3455; font-size: 18px; font-weight: 600; letter-spacing: 0.5px;">${sideInfo.eventTitle}</p>
+        ${sideInfo.eventDetails}
+      </div>
+    </div>
+  `;
 
-    // Insert after the intro section
-    const coupleSection = document.getElementById("couple");
-    coupleSection.parentNode.insertBefore(personalizedGreeting, coupleSection);
+  // Insert after the intro section
+  const coupleSection = document.getElementById("couple");
+  coupleSection.parentNode.insertBefore(personalizedGreeting, coupleSection);
+
+  // Ẩn phần tiệc rượu khi có guest và side parameters
+  const receptionSection = document.getElementById("reception-section");
+  const ceremonySection = document.querySelector(".ceremony-section");
+  if (receptionSection) {
+    receptionSection.style.display = "none";
+    receptionSection.classList.add("hidden");
+
+    // Điều chỉnh margin-bottom của ceremony section
+    if (ceremonySection) {
+      ceremonySection.style.marginBottom = "2px"; // Giảm từ 5px xuống 2px
+    }
+
+    console.log("Reception section hidden for personalized invitation");
   }
 }
 
@@ -113,6 +147,35 @@ document.addEventListener("DOMContentLoaded", () => {
   // Thêm test functions vào global scope để có thể gọi từ console
   window.testGoogleScriptConnection = testGoogleScriptConnection;
   window.testDataSubmission = testDataSubmission;
+  window.testReceptionSectionVisibility = testReceptionSectionVisibility;
+
+  // Test function for scroll button
+  window.testScrollButton = function () {
+    console.log("Testing scroll button...");
+    const scrollIndicator = document.getElementById("scroll-indicator");
+    const coupleSection = document.getElementById("couple");
+
+    console.log("Scroll indicator:", scrollIndicator);
+    console.log("Couple section:", coupleSection);
+    console.log(
+      "Scroll indicator display:",
+      scrollIndicator ? scrollIndicator.style.display : "not found"
+    );
+    console.log(
+      "Scroll indicator opacity:",
+      scrollIndicator ? scrollIndicator.style.opacity : "not found"
+    );
+    console.log(
+      "Scroll indicator pointer-events:",
+      scrollIndicator ? scrollIndicator.style.pointerEvents : "not found"
+    );
+
+    if (coupleSection) {
+      const rect = coupleSection.getBoundingClientRect();
+      console.log("Couple section position:", rect);
+      console.log("Window scroll position:", window.pageYOffset);
+    }
+  };
 
   const scrollIndicator = document.getElementById("scroll-indicator");
 
@@ -133,10 +196,12 @@ document.addEventListener("DOMContentLoaded", () => {
     if (scrollY < 50) {
       scrollIndicator.style.opacity = "1";
       scrollIndicator.style.display = "flex";
+      scrollIndicator.style.pointerEvents = "auto"; // Đảm bảo có thể click
       console.log("Showing indicator"); // Debug log
     } else {
       scrollIndicator.style.opacity = "0";
       scrollIndicator.style.display = "none";
+      scrollIndicator.style.pointerEvents = "none"; // Tắt click khi ẩn
       console.log("Hiding indicator"); // Debug log
     }
   }
@@ -146,6 +211,93 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Initial check
   updateScrollIndicator();
+
+  // Đảm bảo nút luôn hiển thị khi ở đầu trang
+  setTimeout(() => {
+    if (window.scrollY < 50) {
+      scrollIndicator.style.opacity = "1";
+      scrollIndicator.style.display = "flex";
+      scrollIndicator.style.pointerEvents = "auto";
+      console.log("Force showing indicator after timeout");
+    }
+  }, 100);
+
+  // Thêm chức năng click để scroll đến section tiếp theo
+  scrollIndicator.addEventListener("click", function (e) {
+    console.log("Scroll indicator clicked!"); // Debug log
+
+    // Thử nhiều phương pháp scroll
+    const coupleSection = document.getElementById("couple");
+    console.log("Couple section found:", coupleSection);
+
+    if (coupleSection) {
+      // Phương pháp 1: scrollIntoView
+      coupleSection.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+      console.log("Scrolling with scrollIntoView");
+
+      // Phương pháp 2: window.scrollTo (backup)
+      setTimeout(() => {
+        const rect = coupleSection.getBoundingClientRect();
+        const scrollTop = window.pageYOffset + rect.top;
+        window.scrollTo({
+          top: scrollTop,
+          behavior: "smooth",
+        });
+        console.log("Backup: Scrolling to position", scrollTop);
+      }, 200);
+
+      // Phương pháp 3: hash navigation (final backup)
+      setTimeout(() => {
+        window.location.hash = "#couple";
+        console.log("Final backup: Setting hash to #couple");
+      }, 400);
+    } else {
+      console.error("Couple section not found!");
+    }
+  });
+
+  // Thêm event listener cho scroll-arrow để đảm bảo click hoạt động
+  const scrollArrow = scrollIndicator.querySelector(".scroll-arrow");
+  if (scrollArrow) {
+    scrollArrow.addEventListener("click", function (e) {
+      console.log("Scroll arrow clicked!"); // Debug log
+
+      // Thử nhiều phương pháp scroll
+      const coupleSection = document.getElementById("couple");
+      console.log("Couple section found from arrow:", coupleSection);
+
+      if (coupleSection) {
+        // Phương pháp 1: scrollIntoView
+        coupleSection.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+        console.log("Scrolling with scrollIntoView from arrow");
+
+        // Phương pháp 2: window.scrollTo (backup)
+        setTimeout(() => {
+          const rect = coupleSection.getBoundingClientRect();
+          const scrollTop = window.pageYOffset + rect.top;
+          window.scrollTo({
+            top: scrollTop,
+            behavior: "smooth",
+          });
+          console.log("Backup: Scrolling to position from arrow", scrollTop);
+        }, 200);
+
+        // Phương pháp 3: hash navigation (final backup)
+        setTimeout(() => {
+          window.location.hash = "#couple";
+          console.log("Final backup: Setting hash to #couple from arrow");
+        }, 400);
+      } else {
+        console.error("Couple section not found from arrow!");
+      }
+    });
+  }
 });
 
 // Ngày cưới (26/07/2025 lúc 08:00)
@@ -239,24 +391,37 @@ function testGoogleScriptConnection() {
     });
 }
 
-// Function để test submit dữ liệu
-function testDataSubmission() {
-  const testData = {
-    side: "Nhà trai",
-    fullname: "Test User",
-    wish: "Test wish",
-    status: "Sẵn sàng",
-    people: "1",
-    timestamp: Date.now(),
-    origin: window.location.origin,
-    userAgent: navigator.userAgent,
-  };
+// Function để test ẩn/hiện phần tiệc rượu
+function testReceptionSectionVisibility() {
+  console.log("Testing reception section visibility...");
 
-  console.log("Testing data submission with:", testData);
+  // Test 1: Không có parameters
+  console.log("Test 1: No parameters");
+  personalizeInvitation({});
 
-  // Tạo form element giả để test
-  const mockForm = document.createElement("form");
-  submitDataWithJSONP(testData, mockForm);
+  // Test 2: Chỉ có guest
+  setTimeout(() => {
+    console.log("Test 2: Only guest parameter");
+    personalizeInvitation({ guest: "Test Guest" });
+  }, 2000);
+
+  // Test 3: Chỉ có side
+  setTimeout(() => {
+    console.log("Test 3: Only side parameter");
+    personalizeInvitation({ side: "bride" });
+  }, 4000);
+
+  // Test 4: Có đầy đủ parameters
+  setTimeout(() => {
+    console.log("Test 4: Both parameters");
+    personalizeInvitation({ guest: "Test Guest", side: "bride" });
+  }, 6000);
+
+  // Reset sau 8 giây
+  setTimeout(() => {
+    console.log("Resetting to no parameters...");
+    personalizeInvitation({});
+  }, 8000);
 }
 
 // Function để gửi dữ liệu sử dụng JSONP
