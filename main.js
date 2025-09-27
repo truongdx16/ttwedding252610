@@ -110,6 +110,10 @@ document.addEventListener("DOMContentLoaded", () => {
   console.log("Testing Google Apps Script connection...");
   testGoogleScriptConnection();
 
+  // Thêm test functions vào global scope để có thể gọi từ console
+  window.testGoogleScriptConnection = testGoogleScriptConnection;
+  window.testDataSubmission = testDataSubmission;
+
   const scrollIndicator = document.getElementById("scroll-indicator");
 
   // Debug: Check if element exists
@@ -225,12 +229,34 @@ function testGoogleScriptConnection() {
 
         if (data.requestInfo) {
           console.log("Request Info:", data.requestInfo);
+          console.log("Origin:", data.requestInfo.origin);
+          console.log("User Agent:", data.requestInfo.userAgent);
         }
       }
     })
     .catch((error) => {
       console.error("❌ Google Script Test Failed:", error);
     });
+}
+
+// Function để test submit dữ liệu
+function testDataSubmission() {
+  const testData = {
+    side: "Nhà trai",
+    fullname: "Test User",
+    wish: "Test wish",
+    status: "Sẵn sàng",
+    people: "1",
+    timestamp: Date.now(),
+    origin: window.location.origin,
+    userAgent: navigator.userAgent,
+  };
+
+  console.log("Testing data submission with:", testData);
+
+  // Tạo form element giả để test
+  const mockForm = document.createElement("form");
+  submitDataWithJSONP(testData, mockForm);
 }
 
 // Function để gửi dữ liệu sử dụng JSONP

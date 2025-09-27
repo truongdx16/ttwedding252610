@@ -27,10 +27,21 @@ function isAllowedDomain(origin) {
 }
 
 // Function để log request và validate CORS
-function logAndValidateRequest(e, requestType) {
+function logAndValidateRequest(e, requestType, data = null) {
   const timestamp = new Date().toISOString();
-  const userAgent = e.parameter.userAgent || "Unknown";
-  const origin = e.parameter.origin || "Unknown";
+
+  // Lấy thông tin từ data nếu có (JSONP request) hoặc từ parameters (GET request)
+  let userAgent, origin;
+
+  if (data && data.userAgent && data.origin) {
+    // JSONP request - lấy từ data
+    userAgent = data.userAgent;
+    origin = data.origin;
+  } else {
+    // GET request - lấy từ parameters
+    userAgent = e.parameter.userAgent || "Unknown";
+    origin = e.parameter.origin || "Unknown";
+  }
 
   // Log request details
   console.log(`${requestType} Request - ${timestamp}`);
@@ -112,8 +123,11 @@ function createCORSResponse(data, mimeType = ContentService.MimeType.JSON) {
 
 function doPost(e) {
   try {
-    // Log và validate request
-    const requestInfo = logAndValidateRequest(e, "POST");
+    // Parse dữ liệu từ POST request trước
+    const data = JSON.parse(e.postData.contents);
+
+    // Log và validate request với data
+    const requestInfo = logAndValidateRequest(e, "POST", data);
 
     // Kiểm tra rate limiting
     if (requestInfo.isRateLimited) {
@@ -124,9 +138,6 @@ function doPost(e) {
         requestInfo: requestInfo,
       });
     }
-
-    // Parse dữ liệu từ POST request
-    const data = JSON.parse(e.postData.contents);
 
     // Lấy Google Sheet
     const sheet = SpreadsheetApp.getActiveSheet();
@@ -184,9 +195,6 @@ function doPost(e) {
 
 function doGet(e) {
   try {
-    // Log và validate request
-    const requestInfo = logAndValidateRequest(e, "GET");
-
     // Kiểm tra nếu có callback parameter (JSONP)
     const callback = e.parameter.callback;
     const data = e.parameter.data;
@@ -194,6 +202,9 @@ function doGet(e) {
     if (callback && data) {
       // Xử lý JSONP request
       const jsonData = JSON.parse(data);
+
+      // Log và validate request với data
+      const requestInfo = logAndValidateRequest(e, "GET", jsonData);
 
       // Lấy Google Sheet
       const sheet = SpreadsheetApp.getActiveSheet();
@@ -239,6 +250,9 @@ function doGet(e) {
         callback + "(" + JSON.stringify(result) + ")"
       ).setMimeType(ContentService.MimeType.JAVASCRIPT);
     }
+
+    // Log và validate request cho test function
+    const requestInfo = logAndValidateRequest(e, "GET");
 
     // Test function để kiểm tra script hoạt động
     return createCORSResponse({
