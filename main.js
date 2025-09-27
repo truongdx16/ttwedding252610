@@ -215,7 +215,7 @@ document.querySelectorAll("#status-select .select-toggle").forEach((toggle) => {
 // Function để test kết nối với Google Apps Script
 function testGoogleScriptConnection() {
   const GOOGLE_SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbxHczN00ijHekcig1snvn9WFOtPc9ieGz_TKEVezQlVL5gEfTOS_aKWQLjyWDhA3OmK/exec";
+    "https://script.google.com/macros/s/AKfycbxToWicOXuzMNh06qWNMaR0WT3R7dPjABJE4nYec_YYnoYs--bJkBho0DmBqlTj8OPN/exec";
 
   fetch(GOOGLE_SCRIPT_URL)
     .then((response) => response.json())
@@ -262,7 +262,7 @@ function testDataSubmission() {
 // Function để gửi dữ liệu sử dụng JSONP
 function submitDataWithJSONP(data, formElement) {
   const GOOGLE_SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbxHczN00ijHekcig1snvn9WFOtPc9ieGz_TKEVezQlVL5gEfTOS_aKWQLjyWDhA3OmK/exec";
+    "https://script.google.com/macros/s/AKfycbxToWicOXuzMNh06qWNMaR0WT3R7dPjABJE4nYec_YYnoYs--bJkBho0DmBqlTj8OPN/exec";
 
   const script = document.createElement("script");
   const callbackName = "jsonp_callback_" + Math.round(100000 * Math.random());
@@ -391,7 +391,7 @@ document.getElementById("guest-form").addEventListener("submit", function (e) {
 
   // Gửi lên Google Sheets sử dụng JSONP để tránh CORS
   const GOOGLE_SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbxHczN00ijHekcig1snvn9WFOtPc9ieGz_TKEVezQlVL5gEfTOS_aKWQLjyWDhA3OmK/exec";
+    "https://script.google.com/macros/s/AKfycbxToWicOXuzMNh06qWNMaR0WT3R7dPjABJE4nYec_YYnoYs--bJkBho0DmBqlTj8OPN/exec";
 
   // Sử dụng JSONP để tránh CORS với enhanced data
   submitDataWithJSONP(data, this);
