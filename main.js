@@ -106,6 +106,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const urlParams = getUrlParameters();
   personalizeInvitation(urlParams);
 
+  // Test Google Apps Script connection
+  console.log("Testing Google Apps Script connection...");
+  testGoogleScriptConnection();
+
   const scrollIndicator = document.getElementById("scroll-indicator");
 
   // Debug: Check if element exists
@@ -204,10 +208,35 @@ document.querySelectorAll("#status-select .select-toggle").forEach((toggle) => {
   });
 });
 
+// Function để test kết nối với Google Apps Script
+function testGoogleScriptConnection() {
+  const GOOGLE_SCRIPT_URL =
+    "https://script.google.com/macros/s/AKfycbxHczN00ijHekcig1snvn9WFOtPc9ieGz_TKEVezQlVL5gEfTOS_aKWQLjyWDhA3OmK/exec";
+
+  fetch(GOOGLE_SCRIPT_URL)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Google Script Test Response:", data);
+
+      if (data.message && data.message.includes("working")) {
+        console.log("✅ Google Apps Script is working!");
+        console.log("Domain:", data.domain);
+        console.log("Allowed Domains:", data.allowedDomains);
+
+        if (data.requestInfo) {
+          console.log("Request Info:", data.requestInfo);
+        }
+      }
+    })
+    .catch((error) => {
+      console.error("❌ Google Script Test Failed:", error);
+    });
+}
+
 // Function để gửi dữ liệu sử dụng JSONP
 function submitDataWithJSONP(data, formElement) {
   const GOOGLE_SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbzq2ZmzRl47tvAvFo6iXwO3mKX7QOtSWni5HbdGITndmpM0nykYSsuyOwdQq7AhQ7aB/exec";
+    "https://script.google.com/macros/s/AKfycbxHczN00ijHekcig1snvn9WFOtPc9ieGz_TKEVezQlVL5gEfTOS_aKWQLjyWDhA3OmK/exec";
 
   const script = document.createElement("script");
   const callbackName = "jsonp_callback_" + Math.round(100000 * Math.random());
@@ -216,8 +245,24 @@ function submitDataWithJSONP(data, formElement) {
     delete window[callbackName];
     document.body.removeChild(script);
 
+    // Ẩn loading state
+    hideLoadingState(formElement);
+
     if (result.success) {
-      alert("Cảm ơn bạn đã xác nhận! ❤️");
+      // Hiển thị thông báo thành công với thông tin chi tiết
+      let successMessage = "Cảm ơn bạn đã xác nhận! ❤️";
+
+      // Thêm thông tin từ server nếu có
+      if (result.requestInfo) {
+        console.log("Request Info:", result.requestInfo);
+        if (result.requestInfo.rateLimitCount) {
+          console.log(`Rate Limit: ${result.requestInfo.rateLimitCount}/100`);
+        }
+      }
+
+      alert(successMessage);
+
+      // Reset form
       formElement.reset();
       document.getElementById("side-input").value = "Nhà trai";
       document.getElementById("status-input").value = "Sẵn sàng";
@@ -231,8 +276,29 @@ function submitDataWithJSONP(data, formElement) {
         .querySelector('#status-select .select-toggle[data-value="Sẵn sàng"]')
         .classList.add("active");
     } else {
-      alert("Có lỗi xảy ra, vui lòng thử lại sau.");
+      // Hiển thị thông báo lỗi chi tiết hơn
+      let errorMessage = "Có lỗi xảy ra, vui lòng thử lại sau.";
+
+      if (result.error) {
+        if (result.error.includes("Rate limit exceeded")) {
+          errorMessage =
+            "Bạn đã gửi quá nhiều yêu cầu. Vui lòng thử lại sau 1 giờ.";
+        } else {
+          errorMessage = `Lỗi: ${result.error}`;
+        }
+      }
+
+      console.error("Submission Error:", result);
+      alert(errorMessage);
     }
+  };
+
+  // Thêm thông tin origin và user agent vào data
+  const enhancedData = {
+    ...data,
+    origin: window.location.origin,
+    userAgent: navigator.userAgent,
+    timestamp: Date.now(),
   };
 
   const url =
@@ -240,14 +306,37 @@ function submitDataWithJSONP(data, formElement) {
     "?callback=" +
     callbackName +
     "&data=" +
-    encodeURIComponent(JSON.stringify(data));
+    encodeURIComponent(JSON.stringify(enhancedData));
   script.src = url;
   document.body.appendChild(script);
+}
+
+// Function để hiển thị loading state
+function showLoadingState(formElement) {
+  const submitBtn = formElement.querySelector('button[type="submit"]');
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Đang gửi...";
+    submitBtn.style.opacity = "0.7";
+  }
+}
+
+// Function để ẩn loading state
+function hideLoadingState(formElement) {
+  const submitBtn = formElement.querySelector('button[type="submit"]');
+  if (submitBtn) {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Submit (Xác nhận)";
+    submitBtn.style.opacity = "1";
+  }
 }
 
 // Bắt sự kiện submit form
 document.getElementById("guest-form").addEventListener("submit", function (e) {
   e.preventDefault(); // Ngăn reload
+
+  // Hiển thị loading state
+  showLoadingState(this);
 
   // Lấy dữ liệu từ form
   const side = document.getElementById("side-input").value;
@@ -258,11 +347,12 @@ document.getElementById("guest-form").addEventListener("submit", function (e) {
 
   // Kiểm tra tên không rỗng
   if (!fullname) {
+    hideLoadingState(this);
     alert("Vui lòng nhập tên khách mời!");
     return;
   }
 
-  // Tạo dữ liệu
+  // Tạo dữ liệu với thông tin bổ sung
   const data = {
     side,
     fullname,
@@ -270,13 +360,14 @@ document.getElementById("guest-form").addEventListener("submit", function (e) {
     status,
     people,
     timestamp: Date.now(),
+    // Thông tin bổ sung sẽ được thêm trong submitDataWithJSONP
   };
 
   // Gửi lên Google Sheets sử dụng JSONP để tránh CORS
   const GOOGLE_SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbwN0Fm7Db9E2U4JTtyBW-obFCuDv7DLwxsX-TDHEVW5Nybg7EbQsQryPxfgFaXU9ofM/exec";
+    "https://script.google.com/macros/s/AKfycbxHczN00ijHekcig1snvn9WFOtPc9ieGz_TKEVezQlVL5gEfTOS_aKWQLjyWDhA3OmK/exec";
 
-  // Sử dụng JSONP để tránh CORS
+  // Sử dụng JSONP để tránh CORS với enhanced data
   submitDataWithJSONP(data, this);
 });
 
@@ -379,6 +470,7 @@ document.addEventListener("DOMContentLoaded", () => {
         z-index: 10000;
         animation: fadeInOut 3s ease-in-out;
         pointer-events: none;
+        text-align: center;
       `;
       hint.textContent = "🎵 Nhấn vào trang để phát nhạc";
       document.body.appendChild(hint);
